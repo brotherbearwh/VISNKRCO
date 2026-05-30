@@ -1,0 +1,63 @@
+{% comment %}
+  Size chart block
+  Accompanies the swatch.liquid and main-product.liquid files.
+  Accepts:
+  - block: {Object} Liquid object. (required)
+  - template: {String} Template value. (required)
+  - option: {String} Product option. (required)
+  - onboarding: {Boolean} Overrides the logic for displaying the size chart so that it works when we do not have a product with options.
+  Usage:
+  {% render 'size-chart-block', block: block, template: template, option: option, onboarding: false %}
+{% endcomment %}
+{% liquid
+  # Boolean
+  assign show_size_chart = block.settings.show_size_chart
+  # String
+  assign size_chart_option_downcase = block.settings.size_chart_option_name | downcase
+  # String
+  assign label = block.settings.size_chart_label
+  # String
+  assign page = block.settings.size_chart_page
+  # String
+  assign option_name_downcase = option.name | downcase
+  # Boolean
+  assign onboarding = onboarding | default: false
+  # Check for content
+  if page.content == blank
+    assign show_size_chart = false
+  endif
+%}
+{% unless template == 'product.quick' %}
+  {% capture size_chart_id %}size-chart--{{ block.id }}{% endcapture %}
+  {% if show_size_chart and onboarding or size_chart_option_downcase == option_name_downcase %}
+    <div class="size-chart">
+
+      <!-- Button -->
+      <button
+        class="button-as-link js-modal-open"
+        type="button"
+        name="button"
+        aria-label="Open popup"
+        popovertarget="{{ size_chart_id }}"
+        popovertargetaction="show"
+      >
+        {{ label }}
+      </button>
+
+      <!-- Content -->
+      {% capture modal_content %}
+        <div class="rte">
+          {{ page.content }}
+        </div><!-- /.rte -->
+      {% endcapture %}
+
+      <!-- Render snippet -->
+      {% case block.settings.type %}
+        {% when 'modal' %}
+          {% render 'modal', id: size_chart_id, state: 'auto', content: modal_content %}
+        {% when 'drawer' %}
+          {% render 'slideout', id: size_chart_id, state: 'auto', content: modal_content %}
+      {% endcase %}
+    </div><!-- /.size-chart -->
+  {% endif %}
+{% endunless %}

@@ -1,0 +1,45 @@
+{% comment %}
+    Render accordion content
+
+    Accepts:
+    - block: {Object} Block Liquid object
+    - forloop_index: {Number} Forloop index
+
+    Usage:
+    {%
+      render 'snip-accordion-content',
+      block: block,
+      forloop_index: forloop.index
+    %}
+{% endcomment %}
+<div class="product__section--accordion product__section--element">
+  <details
+    class="details details--no-padding"
+    id="{{ block.id }}"
+    {% if block.settings.default_open_accordion %}
+      open
+    {% endif %}
+    data-default-open-accordion="{{ block.settings.default_open_accordion }}"
+    {{ block.shopify_attributes }}
+
+  >
+    <summary class="details__summary">
+      <h3 class="details__title">{{ block.settings.title }}</h3>
+      <div class="details__icon">
+        {% render 'snip-icons',
+          wrapper: '',
+          type: 'apollo',
+          icon: 'down-carrot',
+          classes: 'details__svg vib-center',
+          size: '6px',
+          fill: 'var(--accordion-color)',
+          hover: 'var(--accordion-color)'
+        %}
+      </div>
+    </summary>
+    <div class="details__content rte">
+      {{ block.settings.text }}
+      {{ block.settings.page.content }}
+    </div>
+  </details>
+</div><!-- /.product__section--accordion -->

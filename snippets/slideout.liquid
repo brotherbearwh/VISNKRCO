@@ -1,0 +1,51 @@
+{% comment %}
+
+  Renders a slideout.
+  Snippet for rendering a slideout.
+  Accepts:
+  - id: {String} A string value. (required)
+  - state: {String} State type, can be either "auto" or "manual". (optional)
+  - direction: {String} left or right. (optional)
+  - content: {String} Use Liquid's capture. (optional)
+  - classses: {String} CSS classes. (optional)
+  - attributes: {String} HTML attributes. (optional)
+
+  Usage:
+  {% render 'slideout', id: 'password', state: 'auto', content: captured_content %}
+{% endcomment %}
+<aside
+  popover="{{ state }}"
+  class="slideout slideout__drawer-{{ direction | default: 'right' }} {{ classes }}"
+  {{ attributes }}
+  id="{{ id }}"
+>
+  <div class="slideout__inner-wrapper slideout__general-slide__wrapper">
+    <div class="slideout__inner-content-container">
+      <div
+        class="slideout__trigger--close"
+      >
+        <button
+          class="slideout__trigger-password js-slideout-close"
+          data-slideout-direction="right"
+          aria-label="Close sidebar"
+          tabindex="0"
+          type="button"
+          name="button"
+          popovertarget="{{ id }}"
+          popovertargetaction="hide"
+        >
+          <div class="icn-close" tabindex="0"></div>
+        </button>
+      </div>
+      <div
+        {% comment %}
+        Need something here so that we can select it with JS and change dynaically
+        {% endcomment %}
+        class="sidebar__search-container"
+        tabindex="0"
+      >
+        {{ content }}
+      </div>
+    </div>
+  </div>
+</aside>

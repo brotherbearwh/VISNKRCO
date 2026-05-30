@@ -1,0 +1,42 @@
+{% comment %}
+  Text Popup Block
+
+  Accompanies the Featured Product section and Main Product sections.
+
+  Accepts:
+  - block: {Object} Liquid block object.
+
+  Usage:
+  {% render 'text-popup-block', block: block %}
+{% endcomment %}
+{% if block.settings.text != blank and block.settings.popup_trigger != blank %}
+  <div class="product__section--popup product__section--element {% if block.settings.show_inline %}inline{% endif %}">
+
+    {% capture modal_id %}popup-content--{{ block.id }}{% endcapture %}
+
+    <!-- Opener button -->
+    <button
+      class="product__contact-trigger button-as-link js-modal-open js-contact-trigger"
+      type="button"
+      name="button"
+      data-wau-modal-target="popup-content--{{ block.id }}"
+      popovertarget="{{ modal_id }}"
+      popovertargetaction="show"
+    >
+      {{ block.settings.popup_trigger }}
+    </button>
+
+    <!-- Capture content -->
+    {% capture modal_content %}
+      {{ block.settings.text }}
+    {% endcapture %}
+
+    <!-- Render snippet -->
+    {% case block.settings.type %}
+      {% when 'modal' %}
+        {% render 'modal', id: modal_id, state: 'auto', content: modal_content %}
+      {% when 'drawer' %}
+        {% render 'slideout', id: modal_id, state: 'auto', content: modal_content %}
+    {% endcase %}
+  </div>
+{% endif %}

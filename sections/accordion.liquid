@@ -1,0 +1,176 @@
+{% comment %}Accordion Logic {% endcomment %}
+{%- liquid
+  assign section_padding = ''
+  if section.settings.section_padding == 'top'
+    assign section_padding = 'pb0'
+  elsif section.settings.section_padding == 'bottom'
+    assign section_padding = 'mt0'
+  elsif section.settings.section_padding == 'none'
+    assign section_padding = 'mt0 pb0'
+  endif
+
+  if section.settings.title != blank
+    assign grid_width = 'span-9'
+  else
+    assign grid_width = 'span-12'
+  endif
+-%}
+
+{% comment %} Accordion Template {% endcomment %}
+<section
+  class="accordion__section global__section row section-{{ section.id }} {{ section_padding }}"
+  data-section-type="accordion"
+>
+  <div class="accordion__section-inner-wrapper grid__wrapper">
+    {% if section.settings.title != blank %}
+      <div class="accordion__section-title span-3 sm-span-12 auto">
+        <h2>{{ section.settings.title | escape }}</h2>
+      </div>
+    {% endif %}
+
+    <div class="accordion__section-content {{ grid_width }} sm-span-12 auto">
+      {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <details
+              class="details"
+              {% unless section.settings.allow_multiple %}
+                name="{{ section.id }}"
+              {% endunless %}
+              id="{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              <summary class="details__summary">
+                <h3 class="details__title">{{ block.settings.title }}</h3>
+                <div class="details__icon">
+                  {% render 'snip-icons',
+                    wrapper: '',
+                    type: 'apollo',
+                    icon: 'down-carrot',
+                    classes: 'details__svg vib-center',
+                    size: '6px',
+                    fill: section.settings.link_color,
+                    hover: section.settings.link_color
+                  %}
+                </div>
+              </summary>
+              <div class="details__content rte">
+                {{ block.settings.content }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          {% endfor %}
+      {% else %}
+        {% comment %} TODO: Translate this string. {% endcomment %}
+        <p>Add blocks in the theme editor.</p>
+      {% endif %}
+    </div>
+  </div>
+  <style>
+    @media screen and (min-width: 741px) {
+      .accordion__section.section-{{ section.id }} .accordion__section-inner-wrapper {
+        width: {{ section.settings.max_width }}%;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "Accordion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Accordion"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Content width less than 100% width will center on the page",
+      "default": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_multiple",
+      "label": "Allow multiple accordions open at one time",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "section_padding",
+      "label": "Section spacing",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "both",
+      "visible_if": "{{ settings.section_padding > 0 }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_pane",
+      "name": "Accordion pane",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Accordion pane content</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page content",
+          "info": "Add content from a page which will be shown on all product pages"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion",
+      "blocks": [
+        {
+          "type": "accordion_pane"
+        },
+        {
+          "type": "accordion_pane"
+        },
+        {
+          "type": "accordion_pane"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
