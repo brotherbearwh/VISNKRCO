@@ -327,7 +327,7 @@
       "type": "featured-collection",
       "settings": {
         "heading": "HALLOWEEN PICKS",
-        "collection": "halloween",
+        "collection": "halloween-1",
         "carousel": false,
         "show_view_all": false,
         "reduce_width": false,
