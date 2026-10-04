@@ -326,8 +326,8 @@
     "featured_collection_nKjACc": {
       "type": "featured-collection",
       "settings": {
-        "heading": "COLLECTOR PICKS",
-        "collection": "footwear",
+        "heading": "HALLOWEEN PICKS",
+        "collection": "halloween",
         "carousel": false,
         "show_view_all": false,
         "reduce_width": false,
