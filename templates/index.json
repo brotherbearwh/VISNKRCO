@@ -331,8 +331,8 @@
         "carousel": false,
         "show_view_all": false,
         "reduce_width": false,
-        "grid": 4,
-        "limit": 4,
+        "grid": 3,
+        "limit": 3,
         "section_padding": "both"
       }
     },
