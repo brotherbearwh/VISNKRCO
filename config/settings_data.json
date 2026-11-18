@@ -906,6 +906,11 @@
         "type": "shopify://apps/smart-preorder/blocks/embed/01a15100-4973-793f-957d-cb4f1e8abdd8",
         "disabled": false,
         "settings": {}
+      },
+      "12902230620780744548": {
+        "type": "shopify://apps/loyalty-palm/blocks/rewards-widget/019ed48c-c16e-7746-9669-c95e609d92de",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
